@@ -95,6 +95,10 @@ libs:
     - "pthread"
 ```
 
+## Feedback  
+
+Your feedback is highly valued! It helps improve the Nyati Build System. Currently, the tool has been tested with ``MinGW`` and ``Clang``. If you encounter any issues or have suggestions, please let us know.
+
 ## Contributing  
 
 Contributions are welcome! Feel free to open issues or submit pull requests to help improve Nyati Build System.  
