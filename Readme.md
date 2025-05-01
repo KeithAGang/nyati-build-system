@@ -72,7 +72,7 @@ include_dirs: []
 lib_dirs: []
 libs: []
 ```
-
+As an example, your `project.yaml` could look like this:
 
 ```yaml
 project_name: "MyProject"
