@@ -27,9 +27,9 @@ Nyati Build System is an in-progress C/C++ build system designed to simplify the
 To use Nyati Build System, ensure you have Go installed on your system. Clone the repository and build the tool:  
 
 ```bash  
-git clone https://github.com/your-repo/nyati-build-system.git  
+git clone https://github.com/KeithAGang/nyati-build-system 
 cd nyati-build-system  
-go build -o nyati  
+go build -o nyati  # Or nyati.exe on windows
 ```  
 
 ## Usage  
