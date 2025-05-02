@@ -203,6 +203,15 @@ func Build() {
 		return
 	}
 
+	// Ensure the build path exists
+	if _, err := os.Stat(config.BuildPath); os.IsNotExist(err) {
+		fmt.Printf("\033[1;34m[INFO] Build path '%s' does not exist. Creating it...\033[0m\n", config.BuildPath)
+		err := os.MkdirAll(config.BuildPath, os.ModePerm)
+		if err != nil {
+			fmt.Printf("\033[1;31m[ERROR] Failed to create build path '%s': %v\033[0m\n", config.BuildPath, err)
+			return
+		}
+	}
 	var shell, flag, pathsep string
 
 	if os.PathSeparator == '\\' { // Windows
