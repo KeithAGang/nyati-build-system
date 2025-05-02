@@ -193,27 +193,96 @@ func Build() {
 	config := &Config{}
 	file, err := os.ReadFile("project.yaml")
 	if err != nil {
-		fmt.Println("\033[1;31mError reading file:\033[0m", err)
+		fmt.Println("\033[1;31m[ERROR] Failed to read 'project.yaml':\033[0m", err)
 		return
 	}
 
 	err = yaml.Unmarshal(file, &config)
 	if err != nil {
-		fmt.Println("\033[1;31mError unmarshaling YAML:\033[0m", err)
+		fmt.Println("\033[1;31m[ERROR] Failed to parse YAML:\033[0m", err)
 		return
 	}
 
-	fmt.Println("\033[1;36mBuilding...\033[0m")
-	command := exec.Command(config.Compiler, append(config.CompilerFlags, "-o", config.BuildPath+"/"+config.ProjectName)...)
+	var shell, flag, pathsep string
 
-	cmd := exec.Command("bash", "-c", command.String())
+	if os.PathSeparator == '\\' { // Windows
+		shell, flag, pathsep = "cmd", "/C", `\\`
+	} else { // Linux/macOS
+		shell, flag, pathsep = "bash", "-c", `/`
+	}
+
+	// Print Nyati ASCII logo using raw strings
+	fmt.Println("\033[1;36m") // Cyan color
+	fmt.Println(`                    
+                    ███╗   ██╗██╗   ██╗ █████╗ ████████╗██╗
+                    ████╗  ██║╚██╗ ██╔╝██╔══██╗╚══██╔══╝██║
+                    ██╔██╗ ██║ ╚████╔╝ ███████║   ██║   ██║
+                    ██║╚██╗██║  ╚██╔╝  ██╔══██║   ██║   ██║
+                    ██║ ╚████║   ██║   ██║  ██║   ██║   ██║
+                    ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝`)
+	fmt.Println("\033[1;33m                     Build System\033[0m") // Yellow color
+	fmt.Println("\033[1;36m")                                         // Reset color
+
+	fmt.Printf("\033[1;34m[INFO] Building: %s\033[0m\n", config.ProjectName)
+	fmt.Printf("\033[1;34m[INFO] Compiler: %s\033[0m\n", config.Compiler)
+	fmt.Printf("\033[1;34m[INFO] Compiler Flags: %v\033[0m\n", config.CompilerFlags)
+	fmt.Printf("\033[1;34m[INFO] Include Directories: %v\033[0m\n", config.IncluderDirs)
+	fmt.Printf("\033[1;34m[INFO] Library Directories: %v\033[0m\n", config.LibDirs)
+	fmt.Printf("\033[1;34m[INFO] Linked Libraries: %v\033[0m\n", config.Libs)
+
+	var command strings.Builder
+	command.WriteString(config.Compiler)
+
+	for _, flag := range config.CompilerFlags {
+		cmd := " " + flag // Fixed missing space
+		command.WriteString(cmd)
+	}
+
+	for _, srcFile := range config.SrcFiles {
+		cmd := " " + config.SrcPath + pathsep + srcFile
+		command.WriteString(cmd)
+	}
+
+	for _, incdir := range config.IncluderDirs {
+		cmd := " -I" + incdir
+		command.WriteString(cmd)
+	}
+
+	for _, libdir := range config.LibDirs {
+		cmd := " -L" + libdir
+		command.WriteString(cmd)
+	}
+
+	for _, lib := range config.Libs {
+		cmd := " -l" + lib
+		command.WriteString(cmd)
+	}
+
+	command.WriteString(" -o " + config.BuildPath + pathsep + config.ProjectName)
+
+	fmt.Println("\n\033[1;34m[INFO] Compiling with command:\033[0m")
+	fmt.Println("\033[1;32m" + command.String() + "\033[0m")
+
+	cmd := exec.Command(shell, flag, command.String())
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	if err := cmd.Run(); err != nil {
-		fmt.Println("\033[1;31mBuild failed:\033[0m", err)
+	err = cmd.Run()
+	if err != nil {
+		fmt.Println("\033[1;31m[ERROR] Build failed:\033[0m", err)
 		return
 	}
 
-	fmt.Println("\033[1;32mBuild complete!\033[0m")
+	fmt.Println("\n\033[1;32m[SUCCESS] Build completed!\033[0m")
+	fmt.Println("\033[1;36m==============================\033[0m")
+
+	// Run the compiled executable
+	runcmd := exec.Command(shell, flag, config.BuildPath+pathsep+config.ProjectName)
+	runcmd.Stdout = os.Stdout
+	runcmd.Stderr = os.Stderr
+
+	err = runcmd.Run()
+	if err != nil {
+		fmt.Println("\033[1;31m[ERROR] Failed to run executable:\033[0m", err)
+	}
 }
