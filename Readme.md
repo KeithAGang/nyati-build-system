@@ -1,4 +1,4 @@
-# Nyati Build System  
+# Nyati Build System
 
 ```
                     ███╗   ██╗██╗   ██╗ █████╗ ████████╗██╗
@@ -10,103 +10,146 @@
                                                        buffalo
 ```
 
-Nyati Build System is an in-progress C/C++ build system designed to simplify the process of building and running your C/C++ projects. The name "Nyati" means buffalo in Shona, symbolizing strength and reliability. This project is built using Go and Cobra.  
+Nyati Build System is a versatile **build system** designed to simplify the process of building and running projects across various programming stacks, with a primary focus on **C/C++**. However, it is designed to be extensible, making it adaptable to other setups that lack a simplified build system.
 
-## Features  
+The name **"Nyati"** means buffalo in Shona, symbolizing strength and reliability.
 
-- **Project Initialization**: Use the `init` command to generate a `project.yaml` file, where you can define your project's properties.  
-- **Build and Run**: Use the `dev` command to build and execute your project seamlessly.  
+This project is built using **Go** and **Cobra**.
 
-### Planned Features  
+---
 
-1. CLI command to add required YAML fields during initialization.  
-2. Live reload capabilities for a smoother development experience.  
+## Features
 
-## Installation  
+- ✅ **Project Initialization (`init`)** – Generates a `project.yaml` file with default settings.
+- ✅ **Project Setup (`setup`)** – Interactive CLI wizard for configuring `project.yaml`.
+- ✅ **Modify Configuration (`modify`)** – Allows updating specific fields in `project.yaml` via CLI.
+- ✅ **Build and Run (`dev`)** – Compiles and executes your project seamlessly.
 
-To use Nyati Build System, ensure you have Go installed on your system. Clone the repository and build the tool:  
+### Planned Features
 
-```bash  
-git clone https://github.com/KeithAGang/nyati-build-system 
-cd nyati-build-system  
-go build -o nyati  # Or nyati.exe on windows
-```  
+- 🔹 CLI command to dynamically add required YAML fields.
+- 🔹 Live reload capabilities for faster iteration.
+- 🔹 Support for additional programming stacks through plugins or extensions.
 
-## Usage  
+---
 
-### Initialize a Project  
+## Installation
 
-Run the following command to generate a `project.yaml` file:  
+To use Nyati Build System, ensure you have **Go** installed on your system.
 
-```bash  
-nyati init  
-```  
+Clone the repository and build the tool:
 
-Edit the generated `project.yaml` to match your project's configuration.  
+```bash
+git clone https://github.com/KeithAGang/nyati-build-system
+cd nyati-build-system
+go build -o nyati  # Or nyati.exe on Windows
+```
 
-### Build and Run  
+---
 
-Use the `dev` command to build and run your project:  
+## Usage
 
-```bash  
-./nyati dev  
-``` 
-If you add it to PATH, in your project root dir run:
+### Initialize a Project (`init`)
+
+Run the following command to generate an empty `project.yaml` file:
+
+```bash
+nyati init
+```
+
+This will create a `project.yaml` with default values, ready to be configured.
+
+---
+
+### Set Up Project (`setup`)
+
+Run the interactive setup wizard to define your project's configuration:
+
+```bash
+nyati setup
+```
+
+This guides you through entering:
+
+- Project name
+- Compiler settings
+- Source files
+- Include directories
+- Library dependencies, etc.
+
+Once completed, it writes the configuration to `project.yaml`.
+
+---
+
+### Modify a Configuration Field (`modify`)
+
+To update a specific field in `project.yaml`, use the `modify` command:
+
+```bash
+nyati modify <field_name> <new_value>
+```
+
+#### Field Names for Modification
+
+| Field Name       | Description                          | Example Command                              |
+|-------------------|--------------------------------------|----------------------------------------------|
+| `project_name`    | Name of the project                 | `nyati modify project_name "MyApp"`          |
+| `project_type`    | Type of project (Console, Server)   | `nyati modify project_type "Server"`         |
+| `compiler`        | Compiler to use (gcc, clang++)      | `nyati modify compiler "clang++"`            |
+| `compiler_flags`  | Compilation flags (comma-separated) | `nyati modify compiler_flags "-Wall, -O2"`   |
+| `src_path`        | Source file directory               | `nyati modify src_path "src"`                |
+| `src_files`       | Source files (comma-separated)      | `nyati modify src_files "main.cpp, utils.cpp"`|
+| `build_path`      | Output directory for compiled binary| `nyati modify build_path "bin"`              |
+| `include_dirs`    | Include directories (comma-separated)| `nyati modify include_dirs "include, thirdparty"`|
+| `lib_dirs`        | Library directories                 | `nyati modify lib_dirs "libs, /usr/local/lib"`|
+| `libs`            | Libraries to link (comma-separated) | `nyati modify libs "m, pthread"`            |
+
+---
+
+### Build and Run (`dev`)
+
+Use the `dev` command to compile and execute your project:
 
 ```bash
 nyati dev
 ```
 
-## `project.yaml` Structure  
+If you've added Nyati to your system `PATH`, you can simply run:
 
-Below is the generic structure of the `project.yaml` file: 
-```yaml
-project_name: ""
-project_type: ""
-compiler: ""
-compiler_flags: []
-src_path: ""
-src_files: []
-build_path: .
-include_dirs: []
-lib_dirs: []
-libs: []
-```
-As an example, your `project.yaml` could look like this:
-
-```yaml
-project_name: "MyProject"
-project_type: "executable"
-compiler: "gcc"
-compiler_flags:
-    - "-Wall"
-    - "-O2"
-src_path: "src"
-src_files:
-    - "main.c"
-    - "utils.c"
-build_path: "build"
-include_dirs:
-    - "include"
-lib_dirs:
-    - "libs"
-libs:
-    - "m"
-    - "pthread"
+```bash
+nyati dev
 ```
 
-## Feedback  
+---
 
-Your feedback is highly valued! It helps improve the Nyati Build System. Currently, the tool has been tested with ``MinGW`` and ``Clang``. If you encounter any issues or have suggestions, please let us know.
+## Extensibility
 
-## Contributing  
+Nyati Build System is designed to be extensible, allowing developers to adapt it to other programming stacks or workflows. Future updates will include support for plugins or extensions to handle diverse build environments.
 
-Contributions are welcome! Feel free to open issues or submit pull requests to help improve Nyati Build System.  
+---
 
-## License  
+## Feedback & Contributions
 
-This project is licensed under the MIT License.  
+Your feedback is highly valued! It helps improve Nyati Build System.
 
----  
+🟢 The tool has been tested with MinGW and Clang.  
+🟢 If you encounter any issues or have suggestions, please let us know!
 
-Happy coding with Nyati Build System! 🚀  
+### Contributing
+
+✅ Open issues or submit pull requests to help improve Nyati Build System.  
+✅ Any contribution, big or small, is appreciated!
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Final Thoughts
+
+Nyati is built to be fast, lightweight, and developer-friendly.
+
+Try it out and simplify your development workflow! 🚀 Let us know how we can make it even better.
