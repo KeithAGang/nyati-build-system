@@ -56,6 +56,7 @@ func SetupYaml() {
 	config := &Config{}
 
 	config.ProjectName = readUserInput("\033[1;32mEnter Project Name: \033[0m")
+	config.ProjectName = strings.ReplaceAll(strings.TrimSpace(config.ProjectName), " ", "_")
 	config.ProjectType = readUserInput("\033[1;32mEnter Project Type (e.g., Console, Server): \033[0m")
 	config.Compiler = readUserInput("\033[1;32mEnter Compiler (e.g., g++, clang++): \033[0m")
 
@@ -276,6 +277,8 @@ func Build() {
 		cmd := " -l" + lib
 		command.WriteString(cmd)
 	}
+
+	config.ProjectName = strings.ReplaceAll(strings.TrimSpace(config.ProjectName), " ", "_")
 
 	command.WriteString(" -o " + config.BuildPath + pathsep + config.ProjectName)
 
