@@ -234,7 +234,7 @@ func Build() {
 	command.WriteString(config.Compiler)
 
 	for _, flag := range config.CompilerFlags {
-		cmd := " " + flag // Fixed missing space
+		cmd := " -" + flag // Fixed missing space
 		command.WriteString(cmd)
 	}
 
