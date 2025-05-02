@@ -42,7 +42,7 @@ Clone the repository and build the tool:
 ```bash
 git clone https://github.com/KeithAGang/nyati-build-system
 cd nyati-build-system
-go build -o nyati  # Or nyati.exe on Windows
+go build nyati.go
 ```
 
 ---
