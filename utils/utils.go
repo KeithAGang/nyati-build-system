@@ -211,17 +211,27 @@ func Build() {
 		shell, flag, pathsep = "bash", "-c", `/`
 	}
 
+	// Ensure the output directory exists
+	if _, err := os.Stat(config.BuildPath); os.IsNotExist(err) {
+		fmt.Println("\033[1;34m[INFO] Creating output directory:\033[0m", config.BuildPath)
+		err := os.MkdirAll(config.BuildPath, os.ModePerm)
+		if err != nil {
+			fmt.Println("\033[1;31m[ERROR] Failed to create build directory:\033[0m", err)
+			return
+		}
+	}
+
 	// Print Nyati ASCII logo using raw strings
 	fmt.Println("\033[1;36m") // Cyan color
 	fmt.Println(`                    
-                    ███╗   ██╗██╗   ██╗ █████╗ ████████╗██╗
-                    ████╗  ██║╚██╗ ██╔╝██╔══██╗╚══██╔══╝██║
-                    ██╔██╗ ██║ ╚████╔╝ ███████║   ██║   ██║
-                    ██║╚██╗██║  ╚██╔╝  ██╔══██║   ██║   ██║
-                    ██║ ╚████║   ██║   ██║  ██║   ██║   ██║
-                    ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝`)
-	fmt.Println("\033[1;33m                     Build System\033[0m") // Yellow color
-	fmt.Println("\033[1;36m")                                         // Reset color
+                            ███╗   ██╗██╗   ██╗ █████╗ ████████╗██╗
+                            ████╗  ██║╚██╗ ██╔╝██╔══██╗╚══██╔══╝██║
+                            ██╔██╗ ██║ ╚████╔╝ ███████║   ██║   ██║
+                            ██║╚██╗██║  ╚██╔╝  ██╔══██║   ██║   ██║
+                            ██║ ╚████║   ██║   ██║  ██║   ██║   ██║
+                            ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   ╚═╝`)
+	fmt.Println("\033[1;33m                     				Build System\033[0m") // Yellow color
+	fmt.Println("\033[1;36m")                                             // Reset color
 
 	fmt.Printf("\033[1;34m[INFO] Building: %s\033[0m\n", config.ProjectName)
 	fmt.Printf("\033[1;34m[INFO] Compiler: %s\033[0m\n", config.Compiler)
